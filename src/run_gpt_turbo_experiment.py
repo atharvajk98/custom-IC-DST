@@ -104,6 +104,7 @@ print(f"\nStoring results at output_dir: {args.output_dir}\n")
 
 args.train_fn = f"./data/dataset/train_{args.pct}p_v{args.version}.json"
 print(f"\ntrain file: {args.train_fn}\n")
+
 # create the output folder
 os.makedirs(args.output_dir, exist_ok=True)
 
@@ -128,8 +129,11 @@ else:
 if args.test_fn:
     test_set_path = args.test_fn
 
+print(f"\nontology file: {ontology_path}\n")
 with open(ontology_path) as f:
     ontology = json.load(f)
+    
+print(f"\ntest file: {test_set_path}\n")
 with open(test_set_path) as f:
     test_set = json.load(f)
 

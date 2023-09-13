@@ -47,7 +47,7 @@ args = parser.parse_args()
 set_random_seed(args.seed)
 
 MODEL_NAME = 'sentence-transformers/all-mpnet-base-v2'
-SAVE_NAME = f'all_mpnet_base_v2_mw{args.mwz_ver}_{args.pct}p_v{args.version}'
+SAVE_NAME = f'all_mpnet_base_v2_{args.pct}p_v{args.version}'
 
 train_file = f"./data/dataset/train_{args.pct}p_v{args.version}.json"
 dev_file = f"./data/dataset/mw{args.mwz_ver.replace('.', '')}_100p_dev.json"

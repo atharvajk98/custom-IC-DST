@@ -5,10 +5,11 @@ from collections import OrderedDict
 def sql_pred_parse(pred):
     # parse sql results and fix general errors
 
-    pred = " * FROM" + pred
-
-    # fix for no states
-    if pred == " * FROM  WHERE ":
+    pred = pred.replace("\"", "")
+    pred = pred.strip()
+    pred = "SELECT * FROM " + pred
+    pred = pred.strip()
+    if pred.strip() == "SELECT * FROM WHERE".strip():
         return {}
 
     # Here we need to write a parser to convert back to dialogue state
