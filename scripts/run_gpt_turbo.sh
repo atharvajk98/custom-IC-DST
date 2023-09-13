@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Run gpt turbo experiments for subset data
+SEED=0
+MWZ_VER=2.4
+NUM_EXAMPLES=10
+PCT=100
+VERSION=1
+RETRIEVER_MODEL="all_mpnet_base_v2_mw${MWZ_VER}_${PCT}p_v${VERSION}"
+
+CUDA_VISIBLE_DEVICES=2 nohup python3 -u src/run_gpt_turbo_experiment.py \
+--seed $SEED \
+--mwz_ver $MWZ_VER \
+--pct $PCT \
+--version $VERSION \
+--scratch_retriever \
+--retriever_dir ./src/retriever/indices/${RETRIEVER_MODEL} \
+--output_dir ./expts/gpt_turbo/ \
+--num_examples $NUM_EXAMPLES > logs/gpt_turbo/gpt_turbo_${PCT}p_v${VERSION}_scratch.log &
