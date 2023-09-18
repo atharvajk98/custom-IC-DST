@@ -1,0 +1,12 @@
+{
+    "seed": 0,
+    "mwz_ver": "2.1",
+    "pct": 5,
+    "version": 2,
+    "scratch_retriever": true,
+    "retriever_dir": "./src/retriever/indices/all_mpnet_base_v2_5p_v2",
+    "num_examples": 10,
+    "train_fn": "./data/dataset/train_5p_v2.json",
+    "test_fn": "",
+    "output_dir": "./expts/gpt_turbo/gpt_turbo_mw2.1_5p_v2_scratch"
+}

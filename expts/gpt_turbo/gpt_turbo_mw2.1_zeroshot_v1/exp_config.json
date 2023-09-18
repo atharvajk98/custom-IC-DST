@@ -1,0 +1,9 @@
+{
+    "seed": 0,
+    "mwz_ver": "2.1",
+    "random_exp": false,
+    "version": 1,
+    "num_examples": 10,
+    "test_fn": "",
+    "output_dir": "./expts/gpt_turbo/gpt_turbo_mw2.1_zeroshot_v1"
+}

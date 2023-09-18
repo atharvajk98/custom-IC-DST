@@ -6,20 +6,20 @@ from collections import defaultdict
 from tqdm import tqdm
 from utils.helper import SpeedLimitTimer, PreviousStateRecorder, set_random_seed
 from utils.typo_fix import typo_fix
-from config import CONFIG
 
 import time
 from gpt_turbo_completion import gpt_turbo_completion
 from utils.sql import sql_pred_parse, sv_dict_to_string
 from prompting import get_prompt, conversion, table_prompt
-from retriever.code.embed_based_retriever import EmbeddingRetriever
+from retriever.embed_based_retriever import EmbeddingRetriever
 from evaluate_metrics import evaluate
+import openai
 
 # API_KEY = "OPENAI_API_KEY"
 # API_KEY = "ASYNC_OPENAI_API_KEY"
 # API_KEY = "SHRUTI_OPENAI_API_KEY"
-# API_KEY = "ANDY_OPENAI_API_KEY"
-API_KEY = "JOEL_OPENAI_API_KEY"
+API_KEY = "ANDY_OPENAI_API_KEY"
+# API_KEY = "JOEL_OPENAI_API_KEY"
 
 openai.api_key = os.environ[API_KEY]
 print(f"\nUsing {API_KEY}\n")
@@ -28,13 +28,63 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # input arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--output_dir', type=str, default="./expts/zero-shot",
-                    help="directory to save running log and configs")
-parser.add_argument('--mwz_ver', type=str, default="2.1",
-                    choices=['2.1', '2.4'], help="version of MultiWOZ")
-parser.add_argument('--test_fn', type=str, default='',
-                    help="file to evaluate on, empty means use the test set")
+parser.add_argument(
+    '--seed', 
+    type=int,
+    default=0,
+    help="Seed for reproducibility"
+)
+parser.add_argument(
+    '--mwz_ver', 
+    type=str, 
+    default="2.4",
+    choices=['2.1', '2.4'], help="version of MultiWOZ"
+)
+parser.add_argument(
+    '--random_exp',
+    action='store_true',
+    help='use the randomly selected 10 examples'
+)
+parser.add_argument(
+    '--version', 
+    type=int, 
+    default=1,
+    choices=[1, 2, 3],
+    help='different versions of the data'
+)
+parser.add_argument(
+    '--num_examples', 
+    type=int, 
+    default=10,
+    help="Number of examples for in-context learning"
+)
+parser.add_argument(
+    '--test_fn', 
+    type=str, default='',
+    help="file to evaluate on, empty means use the test set"
+)
+parser.add_argument(
+    '--output_dir', 
+    type=str, 
+    default="IC-DST/expts/few-shot",
+    help="directory to save running log and configs"
+)
 args = parser.parse_args()
+
+# Seed the code
+set_random_seed(args.seed)
+
+print("\nArguments: ")
+for key, value in vars(args).items():
+    print(f"{key}: {value}")
+
+# ----------------------------- Config -----------------------------
+
+if args.random_exp:
+    args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}_random_exp_v{args.version}")
+else:
+    args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}_zeroshot_v{args.version}")
+print(f"\nStoring results at output_dir: {args.output_dir}\n")
 
 # create the output folder
 os.makedirs(args.output_dir, exist_ok=True)
@@ -42,26 +92,28 @@ os.makedirs(args.output_dir, exist_ok=True)
 with open(os.path.join(args.output_dir, "exp_config.json"), 'w') as f:
     json.dump(vars(args), f, indent=4)
 
-NUM_EXAMPLE = 10
-
 # read the ontology and the test set
 if args.mwz_ver == '2.1':
-    ontology_path = CONFIG["ontology_21"]
+    ontology_path = "./data/mwz2.1/ontology.json"
     if args.test_fn == "":
-        test_set_path = "./data/mw21_100p_test.json"
+        test_set_path = "./data/dataset/mw21_100p_test.json"
 else:
-    ontology_path = CONFIG["ontology_24"]
+    ontology_path = "./data/mwz2.4/ontology.json"
     if args.test_fn == "":
-        test_set_path = "./data/mw24_100p_test.json"
+        test_set_path = "./data/dataset/mw24_100p_test.json"
 
 # evaluate on some other file
 if args.test_fn:
     test_set_path = args.test_fn
 
+print(f"\nontology file: {ontology_path}\n")
 with open(ontology_path) as f:
     ontology = json.load(f)
+    
+print(f"\ntest file: {test_set_path}\n")
 with open(test_set_path) as f:
     test_set = json.load(f)
+
 
 demonstration_examples = [
     {
@@ -88,7 +140,7 @@ def run(test_set, turn=-1, use_gold=False):
     # when use_gold = True, the context are gold context (for analysis purpose)
 
     # openai limitation 20 queries/min
-    timer = SpeedLimitTimer(second_per_step=3.1)
+    timer = SpeedLimitTimer(second_per_step=3.1)  # openai limitation 20 queries/min
 
     result_dict = defaultdict(list)  # use to record the accuracy
 
@@ -96,11 +148,9 @@ def run(test_set, turn=-1, use_gold=False):
     # if needed, only evaluate on particular turns (analysis purpose)
     if turn >= 0:
         if not use_gold:
-            raise ValueError(
-                "can only evaluate particular turn when using gold context")
-        selected_set = [d for d in test_set if len(
-            d['dialog']['usr']) == turn + 1]
-
+            raise ValueError("can only evaluate particular turn when using gold context")
+        selected_set = [d for d in test_set if len(d['dialog']['usr']) == turn + 1]
+    
     prediction_recorder = PreviousStateRecorder()  # state recorder
 
     # start experiment
@@ -109,25 +159,24 @@ def run(test_set, turn=-1, use_gold=False):
     n_correct = 0
     total_acc = 0
     total_f1 = 0
+    start = time.time()
 
     for data_item in tqdm(selected_set):
         n_total += 1
 
         completion = ""
         if use_gold:
-            prompt_text = get_prompt(
-                data_item, examples=demonstration_examples)
+            prompt_text = get_prompt(data_item, examples=demonstration_examples)
         else:
             predicted_context = prediction_recorder.state_retrieval(data_item)
             modified_item = copy.deepcopy(data_item)
             modified_item['last_slot_values'] = predicted_context
             examples = demonstration_examples
-            prompt_text = get_prompt(
-                data_item, examples=examples, given_context=predicted_context)
+            prompt_text = get_prompt(data_item, examples=examples, given_context=predicted_context)
 
         # print the retrieved examples (without the sql table)
         print(prompt_text.replace(conversion(table_prompt), ""))
-
+        
         # record the prompt
         data_item['prompt'] = prompt_text
 
@@ -136,7 +185,7 @@ def run(test_set, turn=-1, use_gold=False):
         parse_error_count = 0
         while not complete_flag:
             try:
-                completion = codex_completion(prompt_text)
+                completion = gpt_turbo_completion(prompt_text)
                 # convert back the sql completion result
                 completion = conversion(completion, reverse=True)
             except Exception as e:
@@ -168,11 +217,8 @@ def run(test_set, turn=-1, use_gold=False):
         except:
             print("the output is not a valid SQL query")
             data_item['not_valid'] = 1
-        predicted_slot_values = typo_fix(
-            predicted_slot_values, ontology=ontology, version=args.mwz_ver)
 
-        predicted_slot_values = {k:v for k,v in predicted_slot_values.items() if k in ontology}
-
+        predicted_slot_values = typo_fix(predicted_slot_values, ontology=ontology, version=args.mwz_ver)
         context_slot_values = data_item['last_slot_values']  # a dictionary
 
         # merge context and prediction
@@ -229,6 +275,9 @@ def run(test_set, turn=-1, use_gold=False):
 
         print("\n")
 
+    end = time.time()
+    print(f"\nTotal time taken = {end - start}\n")
+    
     print(f"correct {n_correct}/{n_total}  =  {n_correct / n_total}")
     print(f"Slot Acc {total_acc/n_total}")
     print(f"Joint F1 {total_f1/n_total}")

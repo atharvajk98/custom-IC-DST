@@ -1,0 +1,449 @@
+
+Using ANDY_OPENAI_API_KEY
+
+Seed: 0
+
+Arguments: 
+seed: 0
+mwz_ver: 2.1
+random_exp: False
+version: 1
+num_examples: 10
+test_fn: 
+output_dir: ./expts/gpt_turbo/
+
+Storing results at output_dir: ./expts/gpt_turbo/gpt_turbo_mw2.1_zeroshot_v1
+
+
+ontology file: ./data/mwz2.1/ontology.json
+
+
+test file: ./data/dataset/mw21_100p_test.json
+
+  0%|          | 0/7368 [00:00<?, ?it/s]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] 
+[system] 
+Q: [user] i would like a taxi from saint john s college to pizza hut fen ditton .
+SQL: SELECT * FROM
+taxi WHERE destination = pizza hut fen ditton AND departure = saint john s college
+this is the 0th example. SNG0073.json_turn_0
+pred turn change: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton
+gold turn change: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton
+pred states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton
+gold states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton
+
+=====================correct!=======================
+
+
+  0%|          | 1/7368 [00:03<6:21:25,  3.11s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] taxi-destination: pizza hut fenditton, taxi-departure: saint johns college
+[system] what time do you want to leave and what time do you want to arrive by ?
+Q: [user] i want to leave after 17:15 .
+SQL: SELECT * FROM
+taxi WHERE destination = pizza hut fenditton AND departure = saint johns college AND leaveat > 17:15
+this is the 1th example. SNG0073.json_turn_1
+pred turn change: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+gold turn change: taxi-leaveat-17:15
+pred states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+gold states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+
+=====================correct!=======================
+
+
+  0%|          | 2/7368 [00:06<6:21:03,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] taxi-destination: pizza hut fenditton, taxi-departure: saint johns college, taxi-depart_time: 17:15
+[system] booking completed ! your taxi will be blue honda contact number is 07218068540
+Q: [user] thank you for all the help ! i appreciate it .
+SQL: SELECT * FROM
+taxi WHERE destination = pizza hut fenditton AND departure = saint johns college AND leaveat = 17:15
+this is the 2th example. SNG0073.json_turn_2
+pred turn change: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+gold turn change: 
+pred states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+gold states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+
+=====================correct!=======================
+
+
+  0%|          | 3/7368 [00:09<6:20:39,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] taxi-destination: pizza hut fenditton, taxi-departure: saint johns college, taxi-depart_time: 17:15
+[system] you are welcome . is there anything else i can help you with today ?
+Q: [user] no , i am all set . have a nice day . bye .
+SQL: SELECT * FROM
+taxi WHERE destination = pizza hut fenditton AND departure = saint johns college AND leaveat = 17:15
+this is the 3th example. SNG0073.json_turn_3
+pred turn change: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+gold turn change: 
+pred states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+gold states: taxi-departure-saint johns college, taxi-destination-pizza hut fenditton, taxi-leaveat-17:15
+
+=====================correct!=======================
+
+
+  0%|          | 4/7368 [00:12<6:20:51,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] 
+[system] 
+Q: [user] please find a restaurant called nusha .
+SQL: SELECT * FROM
+restaurant WHERE name = nusha
+this is the 4th example. PMUL4648.json_turn_0
+pred turn change: 
+gold turn change: 
+pred states: 
+gold states: 
+
+=====================correct!=======================
+
+
+  0%|          | 5/7368 [00:15<6:20:36,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] 
+[system] i do not seem to be finding anything called nusha . what type of food does the restaurant serve ?
+Q: [user] i am not sure of the type of food but could you please check again and see if you can find it ? thank you .
+SQL: SELECT * FROM
+restaurant WHERE name = nusha
+this is the 5th example. PMUL4648.json_turn_1
+pred turn change: 
+gold turn change: 
+pred states: 
+gold states: 
+
+=====================correct!=======================
+
+
+  0%|          | 6/7368 [00:18<6:20:38,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] 
+[system] could you double check that you've spelled the name correctly ? the closest i can find is nandos .
+Q: [user] it s not a restaurant , it s an attraction . nusha .
+SQL: SELECT * FROM
+attraction WHERE name = nusha
+this is the 6th example. PMUL4648.json_turn_2
+pred turn change: attraction-name-nusha
+gold turn change: attraction-name-nusha
+pred states: attraction-name-nusha
+gold states: attraction-name-nusha
+
+=====================correct!=======================
+
+
+  0%|          | 7/7368 [00:21<6:20:36,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] attraction-name: nusha
+[system] oh its okay . that is an entertainment type located in the south at unit g6 , cambridge leisure park , clifton road . do you need their phone number ?
+Q: [user] no , but please confirm their address again and their postcode .
+SQL: SELECT * FROM
+attraction WHERE name = nusha
+this is the 7th example. PMUL4648.json_turn_3
+pred turn change: attraction-name-nusha
+gold turn change: 
+pred states: attraction-name-nusha
+gold states: attraction-name-nusha
+
+=====================correct!=======================
+
+
+  0%|          | 8/7368 [00:24<6:20:34,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] attraction-name: nusha
+[system] their address is unit g6 , cambridge leisure park , clifton road . the postcode is cb17dy . is their anything else i can do for you ?
+Q: [user] i want indian food in the center area .
+SQL: SELECT * FROM
+restaurant WHERE food = indian AND area = centre
+this is the 8th example. PMUL4648.json_turn_4
+pred turn change: restaurant-area-centre, restaurant-food-indian
+gold turn change: restaurant-area-centre, restaurant-food-indian
+pred states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian
+gold states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian
+
+=====================correct!=======================
+
+
+  0%|          | 9/7368 [00:27<6:20:33,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-area: centre, attraction-name: nusha, restaurant-food_type: indian
+[system] there are 9 indian restaurant -s in centre what price range do you want ?
+Q: [user] i am looking for expensive indian food .
+SQL: SELECT * FROM
+restaurant WHERE food = indian AND pricerange = expensive AND area = centre
+this is the 9th example. PMUL4648.json_turn_5
+pred turn change: restaurant-area-centre, restaurant-food-indian, restaurant-pricerange-expensive
+gold turn change: restaurant-pricerange-expensive
+pred states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-pricerange-expensive
+gold states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-pricerange-expensive
+
+=====================correct!=======================
+
+
+  0%|          | 10/7368 [00:31<6:20:30,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-area: centre, attraction-name: nusha, restaurant-food_type: indian, restaurant-pricerange: expensive
+[system] saffron brasserie is an expensive restaurant that serves italian food
+Q: [user] can i get the address for saffron brasserie ?
+SQL: SELECT * FROM
+restaurant WHERE name = saffron brasserie
+this is the 10th example. PMUL4648.json_turn_6
+pred turn change: restaurant-name-saffron brasserie
+gold turn change: restaurant-name-saffron brasserie
+pred states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+gold states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+
+=====================correct!=======================
+
+
+  0%|          | 11/7368 [00:34<6:20:24,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-food_type: indian, restaurant-name: saffron brasserie, attraction-name: nusha, restaurant-pricerange: expensive, restaurant-area: centre
+[system] the address is hills road city centre
+Q: [user] can i clarify that it was indian food and not italian food please ?
+SQL: SELECT * FROM
+restaurant WHERE name = saffron brasserie AND food = indian
+this is the 11th example. PMUL4648.json_turn_7
+pred turn change: restaurant-food-indian, restaurant-name-saffron brasserie
+gold turn change: 
+pred states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+gold states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+
+=====================correct!=======================
+
+
+  0%|          | 12/7368 [00:37<6:20:22,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-food_type: indian, restaurant-name: saffron brasserie, attraction-name: nusha, restaurant-pricerange: expensive, restaurant-area: centre
+[system] yes , saffron brasserie is indian food .
+Q: [user] thank you that is all the information i need at the moment .
+SQL: SELECT * FROM
+restaurant WHERE name = saffron brasserie AND food = indian AND pricerange = expensive AND area = centre
+this is the 12th example. PMUL4648.json_turn_8
+pred turn change: restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+gold turn change: 
+pred states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+gold states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+
+=====================correct!=======================
+
+
+  0%|          | 13/7368 [00:40<6:20:21,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-food_type: indian, restaurant-name: saffron brasserie, attraction-name: nusha, restaurant-pricerange: expensive, restaurant-area: centre
+[system] i hope i have been of help
+Q: [user] you have . thank you . goodbye .
+SQL: SELECT * FROM
+restaurant WHERE food = indian AND name = saffron brasserie AND pricerange = expensive AND area = centre
+this is the 13th example. PMUL4648.json_turn_9
+pred turn change: restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+gold turn change: 
+pred states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+gold states: attraction-name-nusha, restaurant-area-centre, restaurant-food-indian, restaurant-name-saffron brasserie, restaurant-pricerange-expensive
+
+=====================correct!=======================
+
+
+  0%|          | 14/7368 [00:43<6:20:16,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] 
+[system] 
+Q: [user] i want to find a moderate -ly priced restaurant .
+SQL: SELECT * FROM
+restaurant WHERE pricerange = moderate
+this is the 14th example. PMUL2437.json_turn_0
+pred turn change: restaurant-pricerange-moderate
+gold turn change: restaurant-pricerange-moderate
+pred states: restaurant-pricerange-moderate
+gold states: restaurant-pricerange-moderate
+
+=====================correct!=======================
+
+
+  0%|          | 15/7368 [00:46<6:20:08,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-pricerange: moderate
+[system] i have many options available for you ! is there a certain area or cuisine that interests you ?
+Q: [user] yes i would like the restaurant to be located in the center of the attractions .
+SQL: SELECT * FROM
+restaurant WHERE area = centre
+this is the 15th example. PMUL2437.json_turn_1
+pred turn change: restaurant-area-centre
+gold turn change: restaurant-area-centre
+pred states: restaurant-area-centre, restaurant-pricerange-moderate
+gold states: restaurant-area-centre, restaurant-pricerange-moderate
+
+=====================correct!=======================
+
+
+  0%|          | 16/7368 [00:49<6:20:06,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-area: centre, restaurant-pricerange: moderate
+[system] there are 21 restaurant -s available in the centre of town . how about a specific type of cuisine ?
+Q: [user] i need to know the food type and postcode and it should also have mutliple sports
+SQL: SELECT * FROM
+attraction WHERE type = multiple sports AND area = centre
+this is the 16th example. PMUL2437.json_turn_2
+pred turn change: attraction-area-centre, attraction-type-multiple sports
+gold turn change: 
+pred states: attraction-area-centre, attraction-type-multiple sports, restaurant-area-centre, restaurant-pricerange-moderate
+gold states: restaurant-area-centre, restaurant-pricerange-moderate
+
+=====================wrong!=======================
+
+
+  0%|          | 17/7368 [00:52<6:20:06,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-area: centre, attraction-area: centre, attraction-type: multiple sports, restaurant-pricerange: moderate
+[system] i am sorry i do not understand what you just said . please repeat in a way that makes sense .
+Q: [user] get me the food type and the post code
+SQL: SELECT * FROM
+restaurant WHERE area = centre AND pricerange = moderate
+this is the 17th example. PMUL2437.json_turn_3
+pred turn change: restaurant-area-centre, restaurant-pricerange-moderate
+gold turn change: 
+pred states: attraction-area-centre, attraction-type-multiple sports, restaurant-area-centre, restaurant-pricerange-moderate
+gold states: restaurant-area-centre, restaurant-pricerange-moderate
+
+=====================wrong!=======================
+
+
+  0%|          | 18/7368 [00:55<6:19:57,  3.10s/it]
+Example #1
+[context] 
+[system] 
+Q: [user] i am looking for a guest house to stay in the west. i do not need internet .
+SQL: SELECT * FROM hotel WHERE type = guest house AND area = west AND internet = no;
+
+
+Example #2
+[context] restaurant-area: centre, attraction-area: centre, attraction-type: multiple sports, restaurant-pricerange: moderate
+[system] my favorite it the copper kettle at 4 kings parade city centre cb21sj . it serves british food . does that interest you ?
+Q: [user] absolutely ! thank you ! i also need information on the attractions that have multiple sports in town , in the same area as the restaurant please .
+SQL: SELECT * FROM
