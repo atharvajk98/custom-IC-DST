@@ -4,9 +4,9 @@
 SEED=0
 MWZ_VER=2.1
 NUM_EXAMPLES=10
-VERSION=1
+VERSION=3
 
-CUDA_VISIBLE_DEVICES=2 nohup python3 -u src/run_zeroshot_gpt_turbo_experiment.py \
+CUDA_VISIBLE_DEVICES=3 nohup python3 -u src/run_zeroshot_gpt_turbo_experiment.py \
 --seed $SEED \
 --mwz_ver $MWZ_VER \
 --version $VERSION \
