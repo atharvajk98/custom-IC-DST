@@ -6,6 +6,8 @@ from collections import defaultdict
 from tqdm import tqdm
 from utils.helper import SpeedLimitTimer, PreviousStateRecorder, set_random_seed
 from utils.typo_fix import typo_fix
+import jsonlines
+from pprint import pprint
 
 import time
 from gpt_turbo_completion import gpt_turbo_completion
@@ -15,10 +17,11 @@ from retriever.embed_based_retriever import EmbeddingRetriever
 from evaluate_metrics import evaluate
 import openai
 
-# API_KEY = "OPENAI_API_KEY"
+
+API_KEY = "OPENAI_API_KEY"
 # API_KEY = "ASYNC_OPENAI_API_KEY"
 # API_KEY = "SHRUTI_OPENAI_API_KEY"
-API_KEY = "ANDY_OPENAI_API_KEY"
+# API_KEY = "ANDY_OPENAI_API_KEY"
 # API_KEY = "JOEL_OPENAI_API_KEY"
 
 openai.api_key = os.environ[API_KEY]
@@ -81,11 +84,36 @@ for key, value in vars(args).items():
 # ----------------------------- Config -----------------------------
 
 if args.random_exp:
-    args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}_random_exp_v{args.version}")
+    demonstration_examples = [doc for doc in jsonlines.open(f"./data//dataset/random_data_v{args.version}.jsonl")]
+    args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}random_data_v{args.version}")
+    # demonstration_examples = [doc for doc in jsonlines.open(f"../data/dataset/static_examples_v{args.version}.jsonl")]
+    # args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}static_examples_v{args.version}")
+
 else:
+    demonstration_examples = [
+        {
+            "dialog": {
+                "sys": [""],
+                "usr": [
+                    "i am looking for a guest house to stay in the west. i do not need internet .",
+                ]
+            },
+            "turn_slot_values": {
+                "hotel-type": "guest house",
+                "hotel-area": "west",
+                "hotel-internet": "no"
+            },
+            "last_slot_values": {}
+        }
+    ]
     args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}_zeroshot_v{args.version}")
 print(f"\nStoring results at output_dir: {args.output_dir}\n")
 
+print("\n\nStatic Examples: \n")
+for example in demonstration_examples:
+    pprint(example)
+    print("\n\n")
+    
 # create the output folder
 os.makedirs(args.output_dir, exist_ok=True)
 
@@ -113,24 +141,7 @@ with open(ontology_path) as f:
 print(f"\ntest file: {test_set_path}\n")
 with open(test_set_path) as f:
     test_set = json.load(f)
-
-
-demonstration_examples = [
-    {
-        "dialog": {
-            "sys": [""],
-            "usr": [
-                "i am looking for a guest house to stay in the west. i do not need internet .",
-            ]
-        },
-        "turn_slot_values": {
-            "hotel-type": "guest house",
-            "hotel-area": "west",
-            "hotel-internet": "no"
-        },
-        "last_slot_values": {}
-    }
-]
+    
 
 def run(test_set, turn=-1, use_gold=False):
     # turn and use_gold are for analysis purpose
