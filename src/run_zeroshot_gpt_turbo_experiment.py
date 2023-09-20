@@ -18,9 +18,9 @@ from evaluate_metrics import evaluate
 import openai
 
 
-API_KEY = "OPENAI_API_KEY"
+# API_KEY = "OPENAI_API_KEY"
 # API_KEY = "ASYNC_OPENAI_API_KEY"
-# API_KEY = "SHRUTI_OPENAI_API_KEY"
+API_KEY = "SHRUTI_OPENAI_API_KEY"
 # API_KEY = "ANDY_OPENAI_API_KEY"
 # API_KEY = "JOEL_OPENAI_API_KEY"
 
@@ -84,10 +84,10 @@ for key, value in vars(args).items():
 # ----------------------------- Config -----------------------------
 
 if args.random_exp:
-    demonstration_examples = [doc for doc in jsonlines.open(f"./data//dataset/random_data_v{args.version}.jsonl")]
-    args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}random_data_v{args.version}")
-    # demonstration_examples = [doc for doc in jsonlines.open(f"../data/dataset/static_examples_v{args.version}.jsonl")]
-    # args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}static_examples_v{args.version}")
+    # demonstration_examples = [doc for doc in jsonlines.open(f"./data//dataset/random_data_v{args.version}.jsonl")]
+    # args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}random_data_v{args.version}")
+    demonstration_examples = [doc for doc in jsonlines.open(f"./data/dataset/static_examples_v{args.version}.jsonl")]
+    args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}static_examples_v{args.version}")
 
 else:
     demonstration_examples = [
