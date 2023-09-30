@@ -4,11 +4,11 @@
 SEED=0
 MWZ_VER=2.4
 NUM_EXAMPLES=10
-PCT=10
-VERSION=1
+PCT=100
+VERSION=3
 RETRIEVER_MODEL="all_mpnet_base_v2_${PCT}p_v${VERSION}"
 
-CUDA_VISIBLE_DEVICES=1 nohup python3 -u src/run_gpt_turbo_experiment.py \
+CUDA_VISIBLE_DEVICES=2 nohup python3 -u src/run_gpt_turbo_experiment.py \
 --seed $SEED \
 --mwz_ver $MWZ_VER \
 --pct $PCT \

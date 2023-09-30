@@ -15,11 +15,11 @@ from retriever.embed_based_retriever import EmbeddingRetriever
 from evaluate_metrics import evaluate
 import openai
 
-API_KEY = "OPENAI_API_KEY"
+# API_KEY = "OPENAI_API_KEY"
 # API_KEY = "ASYNC_OPENAI_API_KEY"
 # API_KEY = "SHRUTI_OPENAI_API_KEY"
 # API_KEY = "ANDY_OPENAI_API_KEY"
-# API_KEY = "JOEL_OPENAI_API_KEY"
+API_KEY = "JOEL_OPENAI_API_KEY"
 
 openai.api_key = os.environ[API_KEY]
 print(f"\nUsing {API_KEY}\n")
@@ -102,7 +102,11 @@ args.output_dir = os.path.join(args.output_dir, f"gpt_turbo_mw{args.mwz_ver}_{ar
 args.output_dir = f"{args.output_dir}_scratch" if args.scratch_retriever else args.output_dir
 print(f"\nStoring results at output_dir: {args.output_dir}\n")
 
-args.train_fn = f"./data/dataset/train_{args.pct}p_v{args.version}.json"
+if args.pct == 100:
+    args.retriever_dir = "./src/retriever/indices/all_mpnet_base_v2_100p_v1"
+    args.train_fn = f"./data/dataset/train_100p_v1.json"
+else:
+    args.train_fn = f"./data/dataset/train_{args.pct}p_v{args.version}.json"
 print(f"\ntrain file: {args.train_fn}\n")
 
 # create the output folder
