@@ -15,11 +15,11 @@ from retriever.embed_based_retriever import EmbeddingRetriever
 from evaluate_metrics import evaluate
 import openai
 
-# API_KEY = "OPENAI_API_KEY"
+API_KEY = "OPENAI_API_KEY"
 # API_KEY = "ASYNC_OPENAI_API_KEY"
 # API_KEY = "SHRUTI_OPENAI_API_KEY"
 # API_KEY = "ANDY_OPENAI_API_KEY"
-API_KEY = "JOEL_OPENAI_API_KEY"
+# API_KEY = "JOEL_OPENAI_API_KEY"
 
 openai.api_key = os.environ[API_KEY]
 print(f"\nUsing {API_KEY}\n")
